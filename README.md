@@ -15,7 +15,7 @@ pip install openai
 Clone this repository:
 
 ```bash
-git clone https://github.com/ffm5113/python_openai_whisper.git
+git clone https://github.com/heyfoz/python_openai_whisper.git
 ```
 
 Navigate to the project directory:
