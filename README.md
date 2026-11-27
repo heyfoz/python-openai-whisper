@@ -4,7 +4,58 @@ Turn an audio recording into a transcript or a subtitle file. By default the scr
 
 ## Transcribe a file locally
 
-Use Python 3.12 and a virtual environment. From a terminal on macOS or Linux, run
+Choose your setup for [Windows](#windows), [Linux](#linux), or [macOS](#macos). Each uses Python 3.12 and runs Whisper on your CPU. At the audio file prompt, paste the full path to your recording. Press Enter at the format prompt for plain text, or enter `vtt` or `srt` for captions.
+
+### Windows
+
+Open **Command Prompt** on an x64 PC. If you need Git or Python 3.12, install the missing tools with WinGet, then open a new Command Prompt.
+
+```bat
+winget install --id Git.Git --exact
+winget install --id Python.Python.3.12 --exact
+```
+
+```bat
+git clone https://github.com/heyfoz/python-openai-whisper.git
+cd python-openai-whisper
+py -3.12 -m venv .venv
+.venv\Scripts\activate.bat
+python -m pip install -r requirements-local.txt
+python whisper_local.py
+```
+
+For **PowerShell**, use the same clone, `cd`, and `py` commands. Then run the environment's Python directly. Use this same executable for the examples below.
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install -r requirements-local.txt
+.\.venv\Scripts\python.exe whisper_local.py
+```
+
+If Windows reports a missing Visual C++ runtime DLL when loading the model, install the x64 redistributable. [Microsoft Visual C++ downloads](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist)
+
+### Linux
+
+Start with Git and Python 3.12 with `venv` support. On Ubuntu 24.04, you can install them with
+
+```sh
+sudo apt update
+sudo apt install git python3.12 python3.12-venv
+```
+
+In Bash or another POSIX shell, run
+
+```sh
+git clone https://github.com/heyfoz/python-openai-whisper.git
+cd python-openai-whisper
+python3.12 -m venv .venv
+. .venv/bin/activate
+python -m pip install -r requirements-local.txt
+python whisper_local.py
+```
+
+### macOS
+
+Open **Terminal**. If you use Homebrew and need Git or Python 3.12, run `brew install git python@3.12`. [Python 3.12 on Homebrew](https://formulae.brew.sh/formula/python@3.12)
 
 ```sh
 git clone https://github.com/heyfoz/python-openai-whisper.git
@@ -12,10 +63,12 @@ cd python-openai-whisper
 python3.12 -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements-local.txt
-python whisper_local.py recording.m4a
+python whisper_local.py
 ```
 
-On Windows, create the environment with `py -3.12 -m venv .venv` and activate it with `.venv\Scripts\Activate.ps1` in PowerShell. Run `python whisper_local.py` on its own for prompts.
+### Run again or choose a model
+
+In a new terminal, return to the project folder and repeat the activation command for your platform, or use the PowerShell executable above. You can pass a recording directly to skip the prompts. Quote paths containing spaces, for example `python whisper_local.py "meeting notes.m4a" -o meeting.srt`.
 
 The first local run downloads the multilingual `small` model. Only the selected model is downloaded. Choose `tiny` for a quick draft, or try `large-v3` when you can spend more time and memory on accuracy. Inference uses [faster-whisper](https://github.com/SYSTRAN/faster-whisper) and needs no API key.
 
@@ -34,7 +87,7 @@ Use `-o` to create a new UTF-8 file. A `.vtt` or `.srt` filename selects that su
 
 ```sh
 python whisper_local.py interview.mp3 -o interview.txt
-python whisper_local.py interview.mp3 --format vtt > interview.vtt
+python whisper_local.py interview.mp3 -o interview.vtt
 ```
 
 ## Use OpenAI
